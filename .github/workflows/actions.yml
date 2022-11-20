@@ -20,7 +20,7 @@ jobs:
         run: |
            for file in ${{ steps.changed-files.outputs.all_changed_and_modified_files }}; do
              echo "$file was changed"
-             echo "Tab count in ${file} is $grep -c $'\t' ${file}" >> report.log
+             echo "Tab count in ${file} is $(grep -c $'\t' ${file})" >> report.log
            done
 
       - name: Upload report
