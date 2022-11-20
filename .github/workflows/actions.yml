@@ -14,7 +14,7 @@ jobs:
 
       - name: Get changed files
         id: changed-files
-        uses: tj-actions/changed-files@v24
+        uses: tj-actions/changed-files@v34
 
       - name: Count tabs in changed files
         run: |
