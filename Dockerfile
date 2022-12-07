@@ -1,5 +1,5 @@
 # base image to build a JRE
-FROM openjdk:17-alpine as corretto-jdk
+FROM openjdk:17 as corretto-jdk
 
 # required for strip-debug to work
 RUN apk add --no-cache binutils
