@@ -2,7 +2,7 @@
 FROM openjdk:17 as corretto-jdk
 
 # required for strip-debug to work
-RUN apk add --no-cache binutils
+RUN sudo apt-get install binutils
 
 # Build small JRE image
 RUN $JAVA_HOME/bin/jlink \
