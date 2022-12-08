@@ -29,7 +29,7 @@ jobs:
             avrelian1995/avrelian_1995
           # generate Docker tags based on the following events/attributes
           tags: |
-            type=ref,event=branch,pattern={{date 'YYYYMMDD, h:mm:ss a'}}
+            type=ref,event=branch,pattern={{date 'YYYYMMDD'}}
       -
         name: Set up QEMU
         uses: docker/setup-qemu-action@v2
