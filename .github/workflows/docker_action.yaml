@@ -18,16 +18,16 @@ jobs:
         name: Checkout
         uses: actions/checkout@v3
       -
-        name: Docker meta
-        id: meta
-        uses: docker/metadata-action@v4
-        with:
-          # list of Docker images to use as base name for tags
-          images: |
-            avrelian_1995
-          # generate Docker tags based on the following events/attributes
-          tags: |
-            type=ref,event=branch
+       # name: Docker meta
+       # id: meta
+       # uses: docker/metadata-action@v4
+       # with:
+       #   # list of Docker images to use as base name for tags
+       #   images: |
+       #     avrelian1995/avrelian_1995
+       #   # generate Docker tags based on the following events/attributes
+       #   tags: |
+       #     type=ref,event=branch
       -
         name: Set up QEMU
         uses: docker/setup-qemu-action@v2
@@ -46,5 +46,5 @@ jobs:
         with:
           context: .
           push: true
-          tags: ${{ steps.meta.outputs.tags }}:${{ github.sha }}-${{ github.run_number }}
+          tags: avrelian1995/avrelian_1995:${{ github.sha }}-${{ github.run_number }}
           labels: ${{ steps.meta.outputs.labels }}
