@@ -50,5 +50,6 @@ jobs:
         with:
           context: .
           push: true
+          file: ./Dockerfile
           tags: ${{ env.IMAGE }}:${{ steps.meta.outputs.tags }}:${{ github.sha }}-${{ github.run_number }}
           labels: ${{ steps.meta.outputs.labels }}
