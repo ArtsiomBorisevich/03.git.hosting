@@ -27,7 +27,7 @@ jobs:
             avrelian1995/avrelian_1995
           # generate Docker tags based on the following events/attributes
           tags: |
-             type=raw,value=latest,enable=${{ endsWith(GitHub.ref, dev) }}
+             type=raw,value=latest,enable=${{ endsWith(GitHub.ref, 'dev') }}
              type=ref,event=tag
           flavor: |
              latest=false
