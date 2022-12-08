@@ -13,8 +13,8 @@ on:
 jobs:
   docker:
     runs-on: ubuntu-latest
-    env:
-        IMAGE: it.academy/spring
+   # env:
+   #     IMAGE: it.academy/spring
     steps:
       -
         name: Checkout
@@ -26,10 +26,10 @@ jobs:
         with:
           # list of Docker images to use as base name for tags
           images: |
-            avrelian1995/avrelian_1995
+            it.academy/spring/avrelian_1995
           # generate Docker tags based on the following events/attributes
           tags: |
-            type=ref,event=branch,pattern={{date 'YYYYMMDD'}}
+            type=ref,event=branch
       -
         name: Set up QEMU
         uses: docker/setup-qemu-action@v2
@@ -48,5 +48,5 @@ jobs:
         with:
           context: .
           push: true
-          tags: ${{ env.IMAGE }}:${{ steps.meta.outputs.tags }}:${{ github.sha }}-${{ github.run_number }}
+          tags: ${{ steps.meta.outputs.tags }}:${{ github.sha }}-${{ github.run_number }}
           labels: ${{ steps.meta.outputs.labels }}
