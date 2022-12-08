@@ -27,15 +27,10 @@ jobs:
             avrelian1995/avrelian_1995
           # generate Docker tags based on the following events/attributes
           tags: |
-             type=raw,value=latest,enable=${{ endsWith(GitHub.ref, 'dev') }}
-             type=ref,event=tag
-          flavor: |
-             latest=false
+            type=ref,event=pr,,pattern={{date 'YYYYMMDD, h:mm:ss a'}}
           #  type=edge,enable=true,priority=700,prefix=,suffix=,branch=$repo.default_branch
           #  type=semver,pattern={{version}},value=v1.1.0
           #  type=ref,event=branch
-          #  type=ref,event=pr
-            
           #  type=semver,pattern={{major}}.{{minor}}
       -
         name: Set up QEMU
@@ -55,5 +50,5 @@ jobs:
         with:
           context: .
           push: true
-          tags: ${{ steps.meta.outputs.tags }}
+          tags: ${{ env.IMAGE }}:${{ steps.meta.outputs.tags }}:${{ github.sha }}-${{ github.run_number }}
           labels: ${{ steps.meta.outputs.labels }}
