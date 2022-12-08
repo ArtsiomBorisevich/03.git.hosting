@@ -34,8 +34,6 @@ jobs:
         uses: docker/build-push-action@v3
         with:
           context: .
-          #platforms: linux/amd64,linux/arm64
           push: true
           tags: |
-            avrelian1995/avrelian_1995::latest
             avrelian1995/avrelian_1995::1.0.0
