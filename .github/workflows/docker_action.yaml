@@ -26,10 +26,11 @@ jobs:
           images: |
             avrelian1995/avrelian_1995
           # generate Docker tags based on the following events/attributes
-          #tags: |
+          tags: |
+             type=semver,pattern={{version}},value=v1.1.0
           #  type=ref,event=branch
           #  type=ref,event=pr
-          #  type=semver,pattern={{version}}
+            
           #  type=semver,pattern={{major}}.{{minor}}
       -
         name: Set up QEMU
