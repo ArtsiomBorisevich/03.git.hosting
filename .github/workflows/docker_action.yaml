@@ -13,6 +13,8 @@ on:
 jobs:
   docker:
     runs-on: ubuntu-latest
+    env:
+        IMAGE: it.academy/spring
     steps:
       -
         name: Checkout
@@ -28,10 +30,6 @@ jobs:
           # generate Docker tags based on the following events/attributes
           tags: |
             type=ref,event=branch,pattern={{date 'YYYYMMDD, h:mm:ss a'}}
-          #  type=edge,enable=true,priority=700,prefix=,suffix=,branch=$repo.default_branch
-          #  type=semver,pattern={{version}},value=v1.1.0
-          #  type=ref,event=branch
-          #  type=semver,pattern={{major}}.{{minor}}
       -
         name: Set up QEMU
         uses: docker/setup-qemu-action@v2
@@ -50,6 +48,5 @@ jobs:
         with:
           context: .
           push: true
-          file: ./Dockerfile
           tags: ${{ env.IMAGE }}:${{ steps.meta.outputs.tags }}:${{ github.sha }}-${{ github.run_number }}
           labels: ${{ steps.meta.outputs.labels }}
