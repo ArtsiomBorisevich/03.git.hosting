@@ -36,4 +36,4 @@ jobs:
           context: .
           push: true
           tags: |
-            avrelian1995/avrelian_1995::1.0.0
+            avrelian1995/avrelian_1995:1.0.0
