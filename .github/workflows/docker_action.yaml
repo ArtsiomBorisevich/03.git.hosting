@@ -27,7 +27,11 @@ jobs:
             avrelian1995/avrelian_1995
           # generate Docker tags based on the following events/attributes
           tags: |
-             type=edge,enable=true,priority=700,prefix=,suffix=,branch=$repo.default_branch
+             type=raw,value=latest,enable=${{ endsWith(GitHub.ref, ‘dev’) }}
+             type=ref,event=tag
+          flavor: |
+             latest=false
+          #  type=edge,enable=true,priority=700,prefix=,suffix=,branch=$repo.default_branch
           #  type=semver,pattern={{version}},value=v1.1.0
           #  type=ref,event=branch
           #  type=ref,event=pr
