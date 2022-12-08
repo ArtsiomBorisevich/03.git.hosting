@@ -25,7 +25,6 @@ jobs:
           # list of Docker images to use as base name for tags
           images: |
             avrelian1995/avrelian_1995
-            ghcr.io/username/app
           # generate Docker tags based on the following events/attributes
           tags: |
             type=ref,event=branch
