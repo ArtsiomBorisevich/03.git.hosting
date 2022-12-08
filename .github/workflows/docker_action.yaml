@@ -27,7 +27,7 @@ jobs:
             avrelian1995/avrelian_1995
           # generate Docker tags based on the following events/attributes
           tags: |
-            type=ref,event=pr,,pattern={{date 'YYYYMMDD, h:mm:ss a'}}
+            type=ref,event=pr,pattern={{date 'YYYYMMDD, h:mm:ss a'}}
           #  type=edge,enable=true,priority=700,prefix=,suffix=,branch=$repo.default_branch
           #  type=semver,pattern={{version}},value=v1.1.0
           #  type=ref,event=branch
