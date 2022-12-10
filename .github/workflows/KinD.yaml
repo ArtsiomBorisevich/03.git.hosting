@@ -18,13 +18,8 @@ jobs:
       - name: Testing
         id: step1
         env:
-          result_file: result.log
+          result_file: result.txt
         run: |
          echo -e "Kubernetes version:\n$(kubectl version --short) \nNodes info:$(kubectl get nodes)" >> ${{ env.result_file }}
          echo "The time elapsed is $(($(date '+%s')-${{ steps.step2.outputs.test }})) seconds" >> ${{ env.result_file }}
-         echo ${{ env.result_file }} >> $GITHUB_OUTPUT
-      - name: Calculate duration
-        run: |
-         echo "The time elapsed is $(($(date '+%s')-${{ steps.step2.outputs.test }})) seconds"
-         echo ${{ steps.step1.outputs.test }}
-
+         echo "test=${{ env.result_file }}" >> $GITHUB_OUTPUT
