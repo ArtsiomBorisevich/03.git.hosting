@@ -5,7 +5,7 @@ jobs:
   kind:
     runs-on: ubuntu-latest
     outputs:
-      output1: ${{ steps.step1.outputs }}
+      output1: ${{ steps.step1.outputs.test }}
       output2: ${{ steps.step2.outputs.test }}
     steps:
       - name: Set start timestamp
@@ -18,10 +18,10 @@ jobs:
       - name: Testing
         id: step1
         run: |
-         echo -e "Kubernetes version:\n$(kubectl version --short) \nNodes info:$(kubectl get nodes)" >> $GITHUB_OUTPUT 
-         echo "The time elapsed is $(($(date '+%s')-${{ steps.step2.outputs.test }})) seconds" >> $GITHUB_OUTPUT
+         echo -e "test=Kubernetes version:\n$(kubectl version --short) \nNodes info:$(kubectl get nodes)
+              \nThe time elapsed is $(($(date '+%s')-${{ steps.step2.outputs.test }})) seconds" >> $GITHUB_OUTPUT
       - name: Calculate duration
         run: |
          echo "The time elapsed is $(($(date '+%s')-${{ steps.step2.outputs.test }})) seconds"
-         echo ${{ steps.step1.outputs }}
+         echo ${{ steps.step1.outputs.test }}
 
