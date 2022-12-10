@@ -19,6 +19,6 @@ jobs:
   #        kubectl version --short
       - name: Calculate duration
         run: |
-          duration=((date +%s) - ${{ steps.start.outputs.timestamp }})
+          duration=(date +%s) - ${{ steps.start.outputs.timestamp }}
           # Do something with duration, set as output to then use in Slack message
 
