@@ -18,11 +18,11 @@ jobs:
       - name: Testing
         id: step1
         env:
-          VAR: result.log
+          result_file: result.log
         run: |
-         echo -e "Kubernetes version:\n$(kubectl version --short) \nNodes info:$(kubectl get nodes)" >> $VAR
-         echo "The time elapsed is $(($(date '+%s')-${{ steps.step2.outputs.test }})) seconds" >> $VAR
-         echo $VAR >> $GITHUB_OUTPUT
+         echo -e "Kubernetes version:\n$(kubectl version --short) \nNodes info:$(kubectl get nodes)" >> ${{ env.result_file }}
+         echo "The time elapsed is $(($(date '+%s')-${{ steps.step2.outputs.test }})) seconds" >> ${{ env.result_file }}
+         echo ${{ env.result_file }} >> $GITHUB_OUTPUT
       - name: Calculate duration
         run: |
          echo "The time elapsed is $(($(date '+%s')-${{ steps.step2.outputs.test }})) seconds"
