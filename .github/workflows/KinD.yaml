@@ -9,16 +9,16 @@ jobs:
         id: start
         run: |
           date +%s
-      - name: KinD Cluster setup
-        uses: engineerd/setup-kind@v0.5.0
-        with:
-          version: "v0.16.0"
-      - name: Testing
-        run: |
-          kubectl get nodes
-          kubectl version --short
+  #    - name: KinD Cluster setup
+  #      uses: engineerd/setup-kind@v0.5.0
+  #      with:
+  #        version: "v0.16.0"
+  #    - name: Testing
+  #      run: |
+  #        kubectl get nodes
+  #        kubectl version --short
       - name: Calculate duration
         run: |
-          duration=$((date +%s) - ${{ steps.start.outputs.timestamp }})
+          duration=((date +%s) - ${{ steps.start.outputs.timestamp }})
           # Do something with duration, set as output to then use in Slack message
 
