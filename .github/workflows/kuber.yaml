@@ -23,12 +23,12 @@ jobs:
          echo -e "Kubernetes version:\n$(kubectl version --short) \nNodes info:$(kubectl get nodes)" >> ${{ env.result_file }}
          echo "The time elapsed is $(($(date '+%s')-${{ steps.step2.outputs.test }})) seconds" >> ${{ env.result_file }}
          echo "test=${{ env.result_file }}" >> $GITHUB_OUTPUT
-         cat ${{ steps.step1.outputs.test }}"
+         cat ${{ steps.step1.outputs.test }}
   minikube:
     needs: kind
     runs-on: ubuntu-latest
     outputs:
-      output1: ${{ steps.info.outputs.test }}
+      output3: ${{ steps.info.outputs.test }}
     steps:
     - name: Set start timestamp
       id: info
