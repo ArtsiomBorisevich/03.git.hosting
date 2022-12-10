@@ -18,7 +18,7 @@ jobs:
       - name: Testing
         id: step1
         run: |
-         echo -e "Kubernetes version:\n$(kubectl version --short) \n"Nodes info:$(kubectl get nodes)" >> $GITHUB_OUTPUT 
+         echo -e "Kubernetes version:\n$(kubectl version --short) \nNodes info:$(kubectl get nodes)" >> $GITHUB_OUTPUT 
          echo "The time elapsed is $(($(date '+%s')-${{ steps.step2.outputs.test }})) seconds" >> $GITHUB_OUTPUT
       - name: Calculate duration
         run: |
