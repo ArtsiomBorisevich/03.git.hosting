@@ -5,7 +5,7 @@ jobs:
   kind:
     runs-on: ubuntu-latest
     outputs:
-      output1: ${{ steps.step1.outputs.test }}
+      output1: ${{ steps.step1.outputs }}
       output2: ${{ steps.step2.outputs.test }}
     steps:
       - name: Set start timestamp
