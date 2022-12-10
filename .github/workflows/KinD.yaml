@@ -3,14 +3,16 @@ on: [pull_request, push]
 
 jobs:
   kind:
-    env:
-      SECONDS: 0
     runs-on: ubuntu-latest
+    outputs:
+      output1: ${{ steps.step1.outputs.test }}
+      output2: ${{ steps.step2.outputs.test }}
     steps:
+      - id: step1
+        run: echo "test=hello" >> $GITHUB_OUTPUT
       - name: Set start timestamp
-        id: start
-        run: |
-          ${{ env.SECONDS }}=0
+        id: step2
+        run: echo "$(date '+%s')" >> $GITHUB_OUTPUT
   #    - name: KinD Cluster setup
   #      uses: engineerd/setup-kind@v0.5.0
   #      with:
@@ -21,7 +23,5 @@ jobs:
   #        kubectl version --short
       - name: Calculate duration
         run: |
-          duration=date +%s
-          total=$(duration-${{ env.SECONDS }})
-          # Do something with duration, set as output to then use in Slack message
+         echo "${{job1.outputs.output2}} - $(date '+%s')"
 
