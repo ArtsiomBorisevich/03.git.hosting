@@ -25,7 +25,27 @@ jobs:
          echo "Nodes info:$(kubectl get nodes)" >> $GITHUB_OUTPUT
          echo "The time elapsed:$(($(date '+%s')-${{ steps.step2.outputs.test }})) seconds" >> $GITHUB_OUTPUT
          echo "EOF" >> $GITHUB_OUTPUT
-      - name: Upload report
-        uses: actions/upload-artifact@v3
-        with:
-          path: ${{steps.step1.outputs.test}}
+  minikube:
+    needs: kind
+    runs-on: ubuntu-latest
+    env:
+      result_file: result.txt
+    outputs:
+      output3: ${{ steps.info.outputs.test }}
+    steps:
+    - name: Set start timestamp
+      id: info
+      run: echo "test=$(date '+%s')" >> $GITHUB_OUTPUT
+    - name: start minikube
+      id: minikube
+      uses: medyagh/setup-minikube@latest
+    - name: Minikube info
+      run: |
+        echo ${{needs.kind.outputs.output1}} >> ${{ env.result_file }}
+        echo -e "Kubernetes version:\n$(kubectl version --short)" >> ${{ env.result_file }
+        echo -e "Nodes info:\n$(kubectl get nodes)" >> ${{ env.result_file }
+        echo "The time elapsed is $(($(date '+%s')-${{ steps.info.outputs.test }})) seconds" >> ${{ env.result_file }
+    - name: Upload report
+      uses: actions/upload-artifact@v3
+      with:
+        path: ${{ env.result_file }
