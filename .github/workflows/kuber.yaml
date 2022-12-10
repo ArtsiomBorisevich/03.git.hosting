@@ -21,7 +21,7 @@ jobs:
           result_file: result.txt
         run: |
          echo "test<<EOF" >> $GITHUB_OUTPUT
-         echo "Kubernetes version:$(kubectl version --short)" >> $GITHUB_OUTPUT
+         echo "KinD kubernetes version:$(kubectl version --short)" >> $GITHUB_OUTPUT
          echo "Nodes info:$(kubectl get nodes)" >> $GITHUB_OUTPUT
          echo "The time elapsed:$(($(date '+%s')-${{ steps.step2.outputs.test }})) seconds" >> $GITHUB_OUTPUT
          echo "EOF" >> $GITHUB_OUTPUT
@@ -42,8 +42,8 @@ jobs:
     - name: Minikube info
       run: |
         echo ${{needs.kind.outputs.output1}} >> ${{ env.result_file }}
-        echo -e "Kubernetes version:\n$(kubectl version --short)" >> ${{ env.result_file }}
-        echo -e "Nodes info:\n$(kubectl get nodes)" >> ${{ env.result_file }}
+        echo -e "Minikube kubernetes version:\n $(kubectl version --short)" >> ${{ env.result_file }}
+        echo -e "Nodes info:\n $(kubectl get nodes)" >> ${{ env.result_file }}
         echo "The time elapsed is $(($(date '+%s')-${{ steps.info.outputs.test }})) seconds" >> ${{ env.result_file }}
     - name: Upload report
       uses: actions/upload-artifact@v3
