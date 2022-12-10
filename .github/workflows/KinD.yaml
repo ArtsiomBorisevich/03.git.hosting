@@ -23,5 +23,5 @@ jobs:
           kubectl version --short
       - name: Calculate duration
         run: |
-         echo $(($(date '+%s')-${{ steps.step2.outputs.test }}))
+         echo "The time elapsed is $(($(date '+%s')-${{ steps.step2.outputs.test }})) seconds"
 
