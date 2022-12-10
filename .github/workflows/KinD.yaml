@@ -15,7 +15,7 @@ jobs:
         uses: engineerd/setup-kind@v0.5.0
         with:
           version: "v0.16.0"
-      - name: Testing
+      - name: KinD info
         id: step1
         env:
           result_file: result.txt
@@ -23,3 +23,24 @@ jobs:
          echo -e "Kubernetes version:\n$(kubectl version --short) \nNodes info:$(kubectl get nodes)" >> ${{ env.result_file }}
          echo "The time elapsed is $(($(date '+%s')-${{ steps.step2.outputs.test }})) seconds" >> ${{ env.result_file }}
          echo "test=${{ env.result_file }}" >> $GITHUB_OUTPUT
+  minikube:
+    needs: kind
+    runs-on: ubuntu-latest
+    outputs:
+      output1: ${{ steps.info.outputs.test }}
+    steps:
+    - name: Set start timestamp
+      id: info
+      run: echo "test=$(date '+%s')" >> $GITHUB_OUTPUT
+    - name: start minikube
+      id: minikube
+      uses: medyagh/setup-minikube@latest
+    - name: Minikube info
+      run: |
+        echo -e "kubernetes version:\n$(kubectl version --short)" >> ${{needs.kind.outputs.output1}} 
+        echo "Nodes information:" >> ${{needs.kind.outputs.output1}} 
+        echo "$(kubectl get nodes)" >> ${{needs.kind.outputs.output1}} 
+    - name: Upload report
+      uses: actions/upload-artifact@v3
+      with:
+        path: ${{needs.kind.outputs.output1}}
