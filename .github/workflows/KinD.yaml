@@ -8,8 +8,6 @@ jobs:
       output1: ${{ steps.step1.outputs.test }}
       output2: ${{ steps.step2.outputs.test }}
     steps:
-      - id: step1
-        run: echo "test=hello" >> $GITHUB_OUTPUT
       - name: Set start timestamp
         id: step2
         run: echo "test=$(date '+%s')" >> $GITHUB_OUTPUT
@@ -18,10 +16,12 @@ jobs:
         with:
           version: "v0.16.0"
       - name: Testing
+        id: step1
         run: |
-          kubectl get nodes
-          kubectl version --short
+         echo -e "Kubernetes version:\n$(kubectl version --short) \n"Nodes info:$(kubectl get nodes)" >> $GITHUB_OUTPUT 
+         echo "The time elapsed is $(($(date '+%s')-${{ steps.step2.outputs.test }})) seconds" >> $GITHUB_OUTPUT
       - name: Calculate duration
         run: |
          echo "The time elapsed is $(($(date '+%s')-${{ steps.step2.outputs.test }})) seconds"
+         echo ${{ steps.step1.outputs }}
 
