@@ -33,20 +33,20 @@ jobs:
     outputs:
       output3: ${{ steps.info.outputs.test }}
     steps:
+    - name: Install Kustomize
+      run: echo "${{needs.kind.outputs.output1}}" >> ${{ env.result_file }}
     - name: Set start timestamp
       id: info
       run: echo "test=$(date '+%s')" >> $GITHUB_OUTPUT
     - name: start minikube
       id: minikube
       uses: medyagh/setup-minikube@latest
-   # - name: Install Kustomize
-   #   uses: multani/action-setup-kustomize@v1
     - name: Minikube info
       run: |
-        echo -e "Minikube kubernetes version:\n $(kubectl version --short)" >> ${{ env.result_file }}
+        echo -e "Minikube kubernetes version:\n$(kubectl version --short)" >> ${{ env.result_file }}
         echo -e "Nodes info:\n $(kubectl get nodes)" >> ${{ env.result_file }}
         echo "The time elapsed is $(($(date '+%s')-${{ steps.info.outputs.test }})) seconds" >> ${{ env.result_file }}
-     #   echo ${{needs.kind.outputs.output1}} >> ${{ env.result_file }}
+        echo "${{needs.kind.outputs.output1}}" >> ${{ env.result_file }}
     - name: Upload report
       uses: actions/upload-artifact@v3
       with:
