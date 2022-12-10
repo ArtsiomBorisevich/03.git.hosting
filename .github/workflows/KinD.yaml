@@ -12,7 +12,7 @@ jobs:
         run: echo "test=hello" >> $GITHUB_OUTPUT
       - name: Set start timestamp
         id: step2
-        run: echo "$(date '+%s')" >> $GITHUB_OUTPUT
+        run: echo "test=$(date '+%s')" >> $GITHUB_OUTPUT
   #    - name: KinD Cluster setup
   #      uses: engineerd/setup-kind@v0.5.0
   #      with:
@@ -23,5 +23,5 @@ jobs:
   #        kubectl version --short
       - name: Calculate duration
         run: |
-         echo "${{outputs.output2}} - $(date '+%s')"
+         echo ${{ steps.step2.outputs.test }} - $(date '+%s')"
 
