@@ -23,5 +23,5 @@ jobs:
   #        kubectl version --short
       - name: Calculate duration
         run: |
-         echo "${{job1.outputs.output2}} - $(date '+%s')"
+         echo "${{kind.outputs.output2}} - $(date '+%s')"
 
