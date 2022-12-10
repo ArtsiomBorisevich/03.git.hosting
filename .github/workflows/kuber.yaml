@@ -23,7 +23,7 @@ jobs:
          echo "info<<EOF" >> $GITHUB_OUTPUT
          echo -e "KinD kubernetes version:\n$(kubectl version --short)" >> $GITHUB_OUTPUT
          echo -e "Nodes info:\n$(kubectl get nodes)" >> $GITHUB_OUTPUT
-         echo "Count of nodes:$(kubectl get nodes | grep -c 'Ready')" >> ${{ env.report }}
+         echo "Count of nodes:$(kubectl get nodes | grep -c 'Ready')" >> $GITHUB_OUTPUT
          echo "The time elapsed:$(($(date '+%s')-${{ steps.time.outputs.time }})) seconds" >> $GITHUB_OUTPUT
          echo "EOF" >> $GITHUB_OUTPUT
   minikube:
