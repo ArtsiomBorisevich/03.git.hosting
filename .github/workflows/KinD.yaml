@@ -23,7 +23,7 @@ jobs:
          echo -e "Kubernetes version:\n$(kubectl version --short) \nNodes info:$(kubectl get nodes)" >> ${{ env.result_file }}
          echo "The time elapsed is $(($(date '+%s')-${{ steps.step2.outputs.test }})) seconds" >> ${{ env.result_file }}
          echo "test=${{ env.result_file }}" >> $GITHUB_OUTPUT
-         echo "$cat ${{ steps.step1.outputs.test }}"
+         cat ${{ steps.step1.outputs.test }}"
   minikube:
     needs: kind
     runs-on: ubuntu-latest
@@ -38,7 +38,7 @@ jobs:
       uses: medyagh/setup-minikube@latest
     - name: Minikube info
       run: |
-        echo "$cat ${{needs.kind.outputs.output1}}"
+        cat ${{needs.kind.outputs.output1}}
         echo -e "kubernetes version:\n$(kubectl version --short)" >> ${{needs.kind.outputs.output1}} 
         echo "Nodes information:" >> ${{needs.kind.outputs.output1}} 
         echo "$(kubectl get nodes)" >> ${{needs.kind.outputs.output1}} 
