@@ -13,14 +13,14 @@ jobs:
       - name: Set start timestamp
         id: step2
         run: echo "test=$(date '+%s')" >> $GITHUB_OUTPUT
-  #    - name: KinD Cluster setup
-  #      uses: engineerd/setup-kind@v0.5.0
-  #      with:
-  #        version: "v0.16.0"
-  #    - name: Testing
-  #      run: |
-  #        kubectl get nodes
-  #        kubectl version --short
+      - name: KinD Cluster setup
+        uses: engineerd/setup-kind@v0.5.0
+        with:
+          version: "v0.16.0"
+      - name: Testing
+        run: |
+          kubectl get nodes
+          kubectl version --short
       - name: Calculate duration
         run: |
          echo "${{ steps.step2.outputs.test }} - $(date '+%s')"
