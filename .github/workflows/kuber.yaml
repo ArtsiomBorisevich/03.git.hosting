@@ -20,30 +20,8 @@ jobs:
         env:
           result_file: result.txt
         run: |
-         echo -e "Kubernetes version:\n$(kubectl version --short) \nNodes info:$(kubectl get nodes)" >> ${{ env.result_file }}
-         echo "The time elapsed is $(($(date '+%s')-${{ steps.step2.outputs.test }})) seconds" >> ${{ env.result_file }}
-         echo "test=${{ env.result_file }}" >> $GITHUB_OUTPUT
-         cat ${{ steps.step1.outputs.test }}
-  minikube:
-    needs: kind
-    runs-on: ubuntu-latest
-    outputs:
-      output3: ${{ steps.info.outputs.test }}
-    steps:
-    - name: Set start timestamp
-      id: info
-      run: echo "test=$(date '+%s')" >> $GITHUB_OUTPUT
-    - name: start minikube
-      id: minikube
-      uses: medyagh/setup-minikube@latest
-    - name: Minikube info
-      run: |
-        cat ${{needs.kind.outputs.output1}}
-        echo -e "kubernetes version:\n$(kubectl version --short)" >> ${{needs.kind.outputs.output1}} 
-        echo "Nodes information:" >> ${{needs.kind.outputs.output1}} 
-        echo "$(kubectl get nodes)" >> ${{needs.kind.outputs.output1}} 
-        echo "The time elapsed is $(($(date '+%s')-${{ steps.info.outputs.test }})) seconds" >> ${{needs.kind.outputs.output1}}
-    - name: Upload report
-      uses: actions/upload-artifact@v3
-      with:
-        path: ${{needs.kind.outputs.output1}}
+         echo -e "test=(Kubernetes version:\n$(kubectl version --short) \nNodes info:$(kubectl get nodes) \nThe time elapsed is $(($(date '+%s')-${{ steps.step2.outputs.test }})) seconds)" >> $GITHUB_OUTPUT
+      - name: Upload report
+        uses: actions/upload-artifact@v3
+        with:
+          path: ${{steps.step2.outputs.test}}
