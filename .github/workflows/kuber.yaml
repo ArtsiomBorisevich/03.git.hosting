@@ -44,7 +44,7 @@ jobs:
         echo -e "${{needs.kind.outputs.output1}}\n" >> ${{ env.report }}
         echo -e "Minikube kubernetes version:\n$(kubectl version --short)" >> ${{ env.report }}
         echo -e "Nodes info:\n$(kubectl get nodes)" >> ${{ env.report }}
-        echo "$(kubectl get nodes -o=jsonpath='{range .items..metadata}{.status}{"\n"}{end}' | fgrep -c Ready)" >> ${{ env.report }}
+        echo "$(kubectl get nodes | grep -c 'Ready')" >> ${{ env.report }}
         echo "The time elapsed is $(($(date '+%s')-${{ steps.time2.outputs.time2 }})) seconds" >> ${{ env.report }}
     - name: Upload report
       uses: actions/upload-artifact@v3
