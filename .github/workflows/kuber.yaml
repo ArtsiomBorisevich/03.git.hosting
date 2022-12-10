@@ -24,4 +24,4 @@ jobs:
       - name: Upload report
         uses: actions/upload-artifact@v3
         with:
-          path: ${{steps.step2.outputs.test}}
+          path: ${{steps.step1.outputs.test}}
