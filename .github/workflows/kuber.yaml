@@ -5,11 +5,11 @@ jobs:
   build:
     name: Build
     runs-on: ubuntu-latest
-    outputs:
-      output1: ${{ steps.test.outputs.test }}
+    env:
+      report: report.txt
     steps:
     - name: executing remote ssh commands using password
-      id: test
+      id: info
       uses: appleboy/ssh-action@v0.1.6
       with:
         host: ${{ secrets.HOST }}
@@ -19,18 +19,10 @@ jobs:
         proxy_username: ${{ secrets.PROXY_USERNAME }}
         proxy_password: ${{ secrets.PROXY_PASSWORD }}
         script: |
-          echo "test<<EOF" >> $GITHUB_OUTPUT
-          echo -e "Crushed pods:/n$(kubectl get pods --all-namespaces --field-selector=status.phase=Running)" >> $GITHUB_OUTPUT
-          echo "EOF" >> $GITHUB_OUTPUT
-    - name: Upload file to slack 
-      if: ${{ contains(steps.test.outputs.test, 'Running') }}
-      uses: rtCamp/action-slack-notify@v2
-      env:
-            SLACK_CHANNEL: 08-docker
-            SLACK_COLOR: ${{ job.status }}
-            SLACK_ICON: https://github.com/rtCamp.png?size=48
-            SLACK_MESSAGE: 'Post Content :rocket:'
-            SLACK_TITLE: 'ALERT!. REPORT: ${{ env.report }}'
-            SLACK_USERNAME: Artiom Borisevich
-            SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
+          echo "Podes info:$(kubectl get pods -A)"
+          echo "Crushed pods:$(kubectl get pods --all-namespaces --field-selector=status.phase=Running)" > ${{ env.report }}
+    - name: Upload report
+      uses: actions/upload-artifact@v3
+      with:
+        path: ${{ env.report }}
           
