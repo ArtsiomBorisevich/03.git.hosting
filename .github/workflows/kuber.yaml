@@ -22,7 +22,6 @@ jobs:
         script: |
           echo "$(kubectl get pods -A)" 
           echo "$(kubectl get pods -A)" >> ${{ env.report }}
-          echo "$(kubectl get pods -A)" >>  $GITHUB_STEP_SUMMARY
     - name: Test
       run: |
         cat ${{ env.report }}
