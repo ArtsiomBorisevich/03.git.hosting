@@ -5,10 +5,13 @@ jobs:
   build:
     name: Build
     runs-on: ubuntu-latest
+    outputs:
+      output1: ${{ steps.info.outputs.info }}
     env:
       report: report.log
     steps:
     - name: executing remote ssh commands using password
+      id: info
       uses: appleboy/ssh-action@v0.1.6
       with:
         host: ${{ secrets.HOST }}
@@ -20,9 +23,11 @@ jobs:
         script: |
           echo "Podes info:$(kubectl get pods -A)"
           echo "Crushed pods:$(kubectl get pods --all-namespaces --field-selector=status.phase=Running)" > ${{ env.report }}
-          echo "Crushed pods:$(kubectl get pods --all-namespaces --field-selector=status.phase=Running)" > $GITHUB_OUTPUT
+          echo "info<<EOF"> $GITHUB_OUTPUT
+          Crushed pods:$(kubectl get pods --all-namespaces --field-selector=status.phase=Running)" >> $GITHUB_OUTPU
+          echo "EOF" >> $GITHUB_OUTPUT
     - name: Upload file to slack 
-      if: ${{ contains($GITHUB_OUTPUT, 'Running') }}
+      if: ${{ contains(steps.info.outputs.info, 'Running') }}
       uses: rtCamp/action-slack-notify@v2
       env:
             SLACK_CHANNEL: 08-docker
