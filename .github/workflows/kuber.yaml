@@ -6,10 +6,10 @@ jobs:
     name: Build
     runs-on: ubuntu-latest
     outputs:
-      output1: ${{ steps.info.outputs.info }}
+      output1: ${{ steps.test.outputs.test }}
     steps:
     - name: executing remote ssh commands using password
-      id: info
+      id: test
       uses: appleboy/ssh-action@v0.1.6
       with:
         host: ${{ secrets.HOST }}
@@ -19,11 +19,11 @@ jobs:
         proxy_username: ${{ secrets.PROXY_USERNAME }}
         proxy_password: ${{ secrets.PROXY_PASSWORD }}
         script: |
-          echo "info<<EOF" >> $GITHUB_OUTPUT
+          echo "test<<EOF" >> $GITHUB_OUTPUT
           echo -e "Crushed pods:/n$(kubectl get pods --all-namespaces --field-selector=status.phase=Running)" >> $GITHUB_OUTPUT
           echo "EOF" >> $GITHUB_OUTPUT
     - name: Upload file to slack 
-      if: ${{ contains(steps.info.outputs.info, 'Running') }}
+      if: ${{ contains(steps.test.outputs.test, 'Running') }}
       uses: rtCamp/action-slack-notify@v2
       env:
             SLACK_CHANNEL: 08-docker
