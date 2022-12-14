@@ -21,7 +21,7 @@ jobs:
           echo "Podes info:$(kubectl get pods -A)"
           echo "Crushed pods:$(kubectl get pods --all-namespaces --field-selector=status.phase=Running)" > ${{ env.report }}
     - name: Upload file to slack 
-      if: ${{ contains(env.report, 'Running') }}
+      if: true
       uses: rtCamp/action-slack-notify@v2
       env:
             SLACK_CHANNEL: 08-docker
