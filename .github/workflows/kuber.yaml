@@ -20,7 +20,9 @@ jobs:
         proxy_username: ${{ secrets.PROXY_USERNAME }}
         proxy_password: ${{ secrets.PROXY_PASSWORD }}
         script: |
-          echo "GITHUB_SHA_SHORT=$(kubectl get pods -A | grep -c 'Running')" echo >> $GITHUB_ENV
-    - name: Test
-      run: echo $GITHUB_SHA_SHORT
+          echo "$(kubectl get pods -A | grep -c 'Running')">> report.log
+    - name: Upload report
+      uses: actions/upload-artifact@v3
+      with:
+        path: report.log
 
