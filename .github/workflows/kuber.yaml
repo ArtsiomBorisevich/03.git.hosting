@@ -21,8 +21,6 @@ jobs:
         proxy_username: ${{ secrets.PROXY_USERNAME }}
         proxy_password: ${{ secrets.PROXY_PASSWORD }}
         script: |
-          echo "Podes info:$(kubectl get pods -A)"
-          echo "Crushed pods:$(kubectl get pods --all-namespaces --field-selector=status.phase=Running)" > ${{ env.report }}
           echo "info<<EOF" >> $GITHUB_OUTPUT
           echo -e "Crushed pods:/n$(kubectl get pods --all-namespaces --field-selector=status.phase=Running)" >> $GITHUB_OUTPUT
           echo "EOF" >> $GITHUB_OUTPUT
