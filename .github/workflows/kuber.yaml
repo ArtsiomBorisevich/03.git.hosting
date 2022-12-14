@@ -7,9 +7,8 @@ jobs:
     runs-on: ubuntu-latest
     env:
       report: report.txt
-      crushed: false
     steps:
-    - name: executing remote ssh commands using password
+    - name: executing remote ssh commands using password    
       id: info
       uses: appleboy/ssh-action@v0.1.6
       with:
@@ -21,12 +20,10 @@ jobs:
         proxy_password: ${{ secrets.PROXY_PASSWORD }}
         envs: ${{ env.report }}
         script: |
-          echo "$(kubectl get pods -A)">> ${{ env.report }}
+          echo "$(kubectl get pods -A)" 
+          echo "$(kubectl get pods -A)" >> ${{ env.report }}
     - name: Test
       run: |
         cat ${{ env.report }}
-    - name: Upload report
-      uses: actions/upload-artifact@v3
-      with:
-        path: report.log
+
 
