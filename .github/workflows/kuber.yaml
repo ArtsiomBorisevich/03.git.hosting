@@ -23,8 +23,8 @@ jobs:
         script: |
           echo "Podes info:$(kubectl get pods -A)"
           echo "Crushed pods:$(kubectl get pods --all-namespaces --field-selector=status.phase=Running)" > ${{ env.report }}
-          echo "info<<EOF"> $GITHUB_OUTPUT
-          Crushed pods:$(kubectl get pods --all-namespaces --field-selector=status.phase=Running)" >> $GITHUB_OUTPU
+          echo "info<<EOF" >> $GITHUB_OUTPUT
+          Crushed pods:$(kubectl get pods --all-namespaces --field-selector=status.phase=Running)" >> $GITHUB_OUTPUT
           echo "EOF" >> $GITHUB_OUTPUT
     - name: Upload file to slack 
       if: ${{ contains(steps.info.outputs.info, 'Running') }}
