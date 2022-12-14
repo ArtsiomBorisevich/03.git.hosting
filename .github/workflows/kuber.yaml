@@ -13,7 +13,7 @@ jobs:
         username: ${{ secrets.USERNAME }}
         password: ${{ secrets.PASSWORD }}
         script: |
-          mkdir ~/.kube/ 
+          mkdir -p ~/.kube/ 
           scp -o ProxyCommand="ssh -W %h:%p -q jump_sa@178.124.206.53" root@192.168.203.3:/etc/rancher/k3s/k3s.yaml ~/.kube/config
           ssh -o ProxyCommand="ssh -W %h:%p -q jump_sa@178.124.206.53" -L 6443:127.0.0.1:6443 root@192.168.203.3 -f -N
     - name: KinD Cluster setup
