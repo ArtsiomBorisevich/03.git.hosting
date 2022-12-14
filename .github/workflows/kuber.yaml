@@ -6,7 +6,7 @@ jobs:
     name: Build
     runs-on: ubuntu-latest
     env:
-      report: report.txt
+      report: report.log
     steps:
     - name: executing remote ssh commands using password
       uses: appleboy/ssh-action@v0.1.6
