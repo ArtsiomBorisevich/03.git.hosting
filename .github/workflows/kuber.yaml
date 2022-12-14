@@ -7,6 +7,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       report: report.txt
+      crushed: false
     steps:
     - name: executing remote ssh commands using password
       id: info
@@ -19,10 +20,16 @@ jobs:
         proxy_username: ${{ secrets.PROXY_USERNAME }}
         proxy_password: ${{ secrets.PROXY_PASSWORD }}
         script: |
-          echo "Podes info:$(kubectl get pods -A)" >> ${{ env.report }}
-          echo "Crushed pods:$(kubectl get pods --all-namespaces --field-selector=status.phase=Running)" >> ${{ env.report }}
-    - name: Upload report
-      uses: actions/upload-artifact@v3
-      with:
-        path: ${{ env.report }}
-          
+          echo "GITHUB_SHA_SHORT=$(kubectl get pods -A | grep -c 'Running')" echo >> $GITHUB_ENV
+    - name: Upload file to slack 
+      if: ${{ GITHUB_SHA_SHORT>0 }
+      uses: rtCamp/action-slack-notify@v2
+      env:
+            SLACK_CHANNEL: 08-docker
+            SLACK_COLOR: ${{ job.status }}
+            SLACK_ICON: https://github.com/rtCamp.png?size=48
+            SLACK_MESSAGE: 'Post Content :rocket:'
+            SLACK_TITLE: 'ALERT!. REPORT: ${{ env.report }}'
+            SLACK_USERNAME: Artiom Borisevich
+            SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
+
