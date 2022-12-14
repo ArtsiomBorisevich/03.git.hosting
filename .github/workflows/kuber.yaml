@@ -22,7 +22,7 @@ jobs:
         script: |
           echo "GITHUB_SHA_SHORT=$(kubectl get pods -A | grep -c 'Running')" echo >> $GITHUB_ENV
     - name: Upload file to slack 
-      if: ${{ GITHUB_SHA_SHORT>0 }}
+      if: ${{ $GITHUB_SHA_SHORT>0 }}
       uses: rtCamp/action-slack-notify@v2
       env:
             SLACK_CHANNEL: 08-docker
