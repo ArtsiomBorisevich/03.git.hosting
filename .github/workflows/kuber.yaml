@@ -20,7 +20,7 @@ jobs:
         proxy_password: ${{ secrets.PROXY_PASSWORD }}
         script: |
           echo "Podes info:$(kubectl get pods -A)"
-          echo "Crushed pods:$(kubectl get pods --all-namespaces --field-selector=status.phase=Running)" > ${{ env.report }}
+          echo "Crushed pods:$(kubectl get pods --all-namespaces --field-selector=status.phase=Running)" >> ${{ env.report }}
     - name: Upload report
       uses: actions/upload-artifact@v3
       with:
