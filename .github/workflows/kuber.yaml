@@ -7,8 +7,6 @@ jobs:
     runs-on: ubuntu-latest
     outputs:
       output1: ${{ steps.info.outputs.info }}
-    env:
-      report: report.log
     steps:
     - name: executing remote ssh commands using password
       id: info
