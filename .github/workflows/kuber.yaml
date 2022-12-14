@@ -19,14 +19,12 @@ jobs:
         proxy_host: ${{ secrets.PROXY_HOST }}
         proxy_username: ${{ secrets.PROXY_USERNAME }}
         proxy_password: ${{ secrets.PROXY_PASSWORD }}
-        envs: FOO
+        envs: $FOO
         script: |
           echo "$(kubectl get pods -A)">> FOO
-          echo "BAR=(kubectl get pods -A)" >> $GITHUB_ENV
     - name: Test
       run: |
         cat $FOO
-        cat $BAR
     - name: Upload report
       uses: actions/upload-artifact@v3
       with:
