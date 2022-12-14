@@ -21,15 +21,6 @@ jobs:
         proxy_password: ${{ secrets.PROXY_PASSWORD }}
         script: |
           echo "GITHUB_SHA_SHORT=$(kubectl get pods -A | grep -c 'Running')" echo >> $GITHUB_ENV
-    - name: Upload file to slack 
-      if: $GITHUB_SHA_SHORT>0 
-      uses: rtCamp/action-slack-notify@v2
-      env:
-            SLACK_CHANNEL: 08-docker
-            SLACK_COLOR: ${{ job.status }}
-            SLACK_ICON: https://github.com/rtCamp.png?size=48
-            SLACK_MESSAGE: 'Post Content :rocket:'
-            SLACK_TITLE: 'ALERT!. REPORT: ${{ env.report }}'
-            SLACK_USERNAME: Artiom Borisevich
-            SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
+    - name: Test
+      run: echo $GITHUB_SHA_SHORT
 
