@@ -6,7 +6,7 @@ jobs:
     name: Build
     runs-on: ubuntu-latest
     env:
-      FOO: report.txt
+      report: report.txt
       crushed: false
     steps:
     - name: executing remote ssh commands using password
@@ -19,12 +19,12 @@ jobs:
         proxy_host: ${{ secrets.PROXY_HOST }}
         proxy_username: ${{ secrets.PROXY_USERNAME }}
         proxy_password: ${{ secrets.PROXY_PASSWORD }}
-        envs: $FOO
+        envs: ${{ env.report }}
         script: |
-          echo "$(kubectl get pods -A)">> FOO
+          echo "$(kubectl get pods -A)">> ${{ env.report }}
     - name: Test
       run: |
-        cat $FOO
+        cat ${{ env.report }}
     - name: Upload report
       uses: actions/upload-artifact@v3
       with:
