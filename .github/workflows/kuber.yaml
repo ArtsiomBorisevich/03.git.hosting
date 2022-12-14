@@ -14,8 +14,9 @@ jobs:
         password: ${{ secrets.PASSWORD }}
         proxy_host: ${{ secrets.PROXY_HOST }}
         proxy_username: ${{ secrets.PROXY_USERNAME }}
-        proxy_key: ${{ secrets.PROXY_KEY }}
+        proxy_password: ${{ secrets.PROXY_PASSWORD }}
         script: |
+          whoami
           mkdir -p ~/.kube/ 
           scp /etc/rancher/k3s/k3s.yaml ~/.kube/config
  #         ssh -o ProxyCommand="ssh -W %h:%p -q jump_sa@178.124.206.53" -L 6443:127.0.0.1:6443 root@192.168.203.3 -f -N
