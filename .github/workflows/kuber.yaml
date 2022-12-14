@@ -5,6 +5,8 @@ jobs:
   build:
     name: Build
     runs-on: ubuntu-latest
+    env:
+      report: report.txt
     steps:
     - name: executing remote ssh commands using password
       uses: appleboy/ssh-action@v0.1.6
@@ -16,15 +18,17 @@ jobs:
         proxy_username: ${{ secrets.PROXY_USERNAME }}
         proxy_password: ${{ secrets.PROXY_PASSWORD }}
         script: |
-          whoami
           echo "Podes info:$(kubectl get pods -A)"
-          mkdir -p ~/.kube/ 
-          scp /etc/rancher/k3s/k3s.yaml ~/.kube/config
- #         ssh -o ProxyCommand="ssh -W %h:%p -q jump_sa@178.124.206.53" -L 6443:127.0.0.1:6443 root@192.168.203.3 -f -N
-    - name: KinD Cluster setup
-      uses: engineerd/setup-kind@v0.5.0
-      with:
-        version: "v0.16.0" 
-    - name: KinD info
-      run: |
-          echo "Nodes info:$(kubectl get pods -A)"
+          echo "Crushed pods:$(kubectl get pods --all-namespaces --field-selector=status.phase=Running)" > ${{ env.report }}
+    - name: Upload file to slack 
+      if: ${{ contains(env.report, 'Running') }}
+      uses: rtCamp/action-slack-notify@v2
+      env:
+            SLACK_CHANNEL: 08-docker
+            SLACK_COLOR: ${{ job.status }}
+            SLACK_ICON: https://github.com/rtCamp.png?size=48
+            SLACK_MESSAGE: 'Post Content :rocket:'
+            SLACK_TITLE: 'ALERT!. REPORT: ${{ env.report }}'
+            SLACK_USERNAME: Artiom Borisevich
+            SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
+          
