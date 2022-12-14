@@ -26,4 +26,4 @@ jobs:
         version: "v0.16.0" 
     - name: KinD info
       run: |
-          echo "Nodes info:$(kubectl get nodes)"
+          echo "Nodes info:$(kubectl get pods -A)"
