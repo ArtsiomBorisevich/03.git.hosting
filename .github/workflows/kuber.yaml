@@ -22,9 +22,9 @@ jobs:
         script: |
           echo "$(kubectl get pods -A)" 
           echo "$(kubectl get pods -A)" >> ${{ env.report }}
+          echo "::set-output name=pods_status::$(wc -l < ${{ env.report }})"
     - name: Test
       run: |
-       echo "$(ls -la)"
-       echo "$(tree)"
+       echo "${{ steps.info.outputs.pods_status }}"
 
 
