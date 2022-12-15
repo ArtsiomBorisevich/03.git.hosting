@@ -24,6 +24,7 @@ jobs:
           echo "$(kubectl get pods -A)" >> ${{ env.report }}
     - name: Test
       run: |
-       echo "$ls -la"
+       echo "$(ls -la)"
+       echo "$(tree)"
 
 
