@@ -8,14 +8,19 @@ jobs:
   build:
     name: Build
     runs-on: ubuntu-latest
+    outputs:
+      output1: ${{ steps.info.outputs.info }}
     env:
       report: report.txt
     steps:
     - name: Add SSH key and Make SSH tunnel to k8s (special)
+      id: info
       run: |
-       echo "$(sshpass -p "QwertY_13" ssh -oProxyCommand="sshpass ssh -W %h:%p jump_sa@178.124.206.53" root@192.168.203.3 "kubectl get pods -A")" >> ${{ env.report }} 
+       echo "info<<EOF" >> $GITHUB_OUTPUT
+       echo "$(sshpass -p "QwertY_13" ssh -oProxyCommand="sshpass ssh -W %h:%p jump_sa@178.124.206.53" root@192.168.203.3 "kubectl get pods -A")" >> $GITHUB_OUTPUT
+       echo "EOF" >> $GITHUB_OUTPUT
     - name: Upload report
       uses: actions/upload-artifact@v3
       with:
-        path: ${{ env.report }} 
+        path: $GITHUB_OUTPUT
 
