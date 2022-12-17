@@ -24,18 +24,18 @@ jobs:
         sshpass -p ${{ secrets.PASSWORD }} ssh -oProxyCommand="sshpass ssh -W %h:%p ${{ secrets.PROXY_USERNAME }}@${{ secrets.PROXY_HOST }}" ${{ secrets.USERNAME }}@${{ secrets.HOST }} "kubectl get pods --all-namespaces --field-selector=status.phase=Failed" >> ${{ env.report }}
         echo "info=$(wc -c ${{ env.report }})" >> $GITHUB_OUTPUT
     - name: Slack Notification
-      if: steps.info.outputs.info>0 
+      if: steps.info.outputs.info==0 
       uses: rtCamp/action-slack-notify@v2
       env:
           SLACK_CHANNEL: 08-docker
           SLACK_COLOR: ${{ job.status }}
           SLACK_ICON: https://github.com/rtCamp.png?size=48
           SLACK_MESSAGE: 'Post Content :rocket:'
-          SLACK_TITLE: 'Something wrong with pods. Number of not running pods is ${{ steps.info.outputs.info }}'
+          SLACK_TITLE: 'Something wrong with pods. Please check ${{ env.report }}'
           SLACK_USERNAME: Artiom Borisevich
           SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
     - name: Upload report
-      if: ${{ steps.info.outputs.info }}>0
+      if: steps.info.outputs.info>0 
       uses: actions/upload-artifact@v3
       with:
         path: ${{ env.report }}
