@@ -24,7 +24,7 @@ jobs:
         sshpass -p ${{ secrets.PASSWORD }} ssh -oProxyCommand="sshpass ssh -W %h:%p ${{ secrets.PROXY_USERNAME }}@${{ secrets.PROXY_HOST }}" ${{ secrets.USERNAME }}@${{ secrets.HOST }} "kubectl get pods --all-namespaces --field-selector=status.phase=Failed" >> ${{ env.report }}
         echo "info=$(wc -l ${{ env.report }})" >> $GITHUB_OUTPUT
     - name: Slack Notification
-      if: steps.info.outputs.info < 1
+      if: steps.info.outputs.info
       uses: rtCamp/action-slack-notify@v2
       env:
           SLACK_CHANNEL: 08-docker
