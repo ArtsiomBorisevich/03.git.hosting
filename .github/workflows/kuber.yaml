@@ -21,10 +21,10 @@ jobs:
         ssh-add - <<< "${{secrets.SSH_KEY}}" 
         ssh-keyscan -H ${{ secrets.PROXY_HOST }} >> ~/.ssh/known_hosts
         ssh ${{ secrets.PROXY_USERNAME }}@${{ secrets.PROXY_HOST }} ssh-keyscan ${{ secrets.HOST }} >> ~/.ssh/known_hosts
-        sshpass -p ${{ secrets.PASSWORD }} ssh -oProxyCommand="sshpass ssh -W %h:%p ${{ secrets.PROXY_USERNAME }}@${{ secrets.PROXY_HOST }}" ${{ secrets.USERNAME }}@${{ secrets.HOST }} "kubectl get pods --all-namespaces --field-selector=status.phase=Failed" >> ${{ env.report }}
+        sshpass -p ${{ secrets.PASSWORD }} ssh -oProxyCommand="sshpass ssh -W %h:%p ${{ secrets.PROXY_USERNAME }}@${{ secrets.PROXY_HOST }}" ${{ secrets.USERNAME }}@${{ secrets.HOST }} "kubectl get pods --all-namespaces --field-selector=status.phase=Running" >> ${{ env.report }}
         echo "info=$(wc -c ${{ env.report }})" >> $GITHUB_OUTPUT
     - name: Slack Notification
-      if: steps.info.outputs.info==0 
+      if: steps.info.outputs.info 
       uses: rtCamp/action-slack-notify@v2
       env:
           SLACK_CHANNEL: 08-docker
