@@ -17,6 +17,7 @@ jobs:
       id: info
       run: |
        echo "$(sshpass -p "QwertY_13" ssh -oProxyCommand="sshpass ssh -W %h:%p jump_sa@178.124.206.53" root@192.168.203.3 "kubectl get pods -A")" > file.txt
+       echo "ДА БЛЯЯЯЯТьЭ
        cat file.txt
     - name: Upload report
       uses: actions/upload-artifact@v3
