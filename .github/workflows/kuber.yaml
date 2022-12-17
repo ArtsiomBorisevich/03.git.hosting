@@ -19,10 +19,10 @@ jobs:
         ssh-add - <<< "${{secrets.SSH_KEY}}" 
         ssh-keyscan -H ${{ secrets.PROXY_HOST }} >> ~/.ssh/known_hosts
         ssh ${{ secrets.PROXY_USERNAME }}@${{ secrets.PROXY_HOST }} ssh-keyscan ${{ secrets.HOST }} >> ~/.ssh/known_hosts
-        sshpass -p ${{ secrets.PASSWORD }} ssh -oProxyCommand="sshpass ssh -W %h:%p ${{ secrets.PROXY_USERNAME }}@${{ secrets.PROXY_HOST }}" ${{ secrets.USERNAME }}@${{ secrets.HOST }} "kubectl get pods --all-namespaces --field-selector=status.phase=Failed" >> ${{ env.report }}
-        OUTPUT=$(wc -c ${{ env.report }}) && echo "::set-output name=OUTPUT::$OUTPUT"
+        sshpass -p ${{ secrets.PASSWORD }} ssh -oProxyCommand="sshpass ssh -W %h:%p ${{ secrets.PROXY_USERNAME }}@${{ secrets.PROXY_HOST }}" ${{ secrets.USERNAME }}@${{ secrets.HOST }} "kubectl get pods -A" >> ${{ env.report }}
+        OUTPUT=$(cat ${{ env.report }} | grep -c 'Running') && echo "::set-output name=OUTPUT::$OUTPUT"
     - name: Slack Notification
-      if: steps.info.outputs.OUTPUT > 0
+      if: steps.info.outputs.OUTPUT < 4
       uses: rtCamp/action-slack-notify@v2
       env:
           SLACK_CHANNEL: 08-docker
@@ -33,7 +33,7 @@ jobs:
           SLACK_USERNAME: Artiom Borisevich
           SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
     - name: Upload report
-      if: steps.info.outputs.OUTPUT > 0
+      if: steps.info.outputs.OUTPUT < 4
       uses: actions/upload-artifact@v3
       with:
         path: ${{ env.report }}
