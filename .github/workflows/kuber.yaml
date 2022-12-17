@@ -22,5 +22,5 @@ jobs:
     - name: Upload report
       uses: actions/upload-artifact@v3
       with:
-        path: $GITHUB_OUTPUT
+        path: ${{ steps.info.outputs.info }}
 
