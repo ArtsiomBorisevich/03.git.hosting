@@ -1,5 +1,8 @@
 name: remote ssh command
-on: [push]
+on: 
+  schedule:
+      - cron: '*/10 * * * *'
+  push:
 jobs:
 
   build:
@@ -8,23 +11,21 @@ jobs:
     env:
       report: report.txt
     steps:
-    - name: executing remote ssh commands using password    
-      id: info
-      uses: appleboy/ssh-action@v0.1.6
-      with:
-        host: ${{ secrets.HOST }}
-        username: ${{ secrets.USERNAME }}
-        password: ${{ secrets.PASSWORD }}
-        proxy_host: ${{ secrets.PROXY_HOST }}
-        proxy_username: ${{ secrets.PROXY_USERNAME }}
-        proxy_password: ${{ secrets.PROXY_PASSWORD }}
-        envs: ${{ env.report }}
-        script: |
-          echo "$(kubectl get pods -A)" 
-          echo "$(kubectl get pods -A)" >> ${{ env.report }}
-          echo "::set-output name=pods_status::$(wc -l < ${{ env.report }})"
-    - name: Test
+    - name: Add SSH key and Make SSH tunnel to k8s (special)
       run: |
-       echo "${{ steps.info.outputs.pods_status }}"
-
+        mkdir -p ~/.ssh
+        eval `ssh-agent -s`
+        ssh-add - <<< "${{secrets.SSH_KEY}}"
+        ssh-keyscan -H ${{secrets.PROXY_HOST}} >> ~/.ssh/known_hosts
+        sudo apt-get install sshuttle
+        sshuttle -r ${{secrets.PROXY_USERNAME}}@${{secrets.PROXY_HOST}} 192.168.0.0/16 &
+    - name: Get kubectl
+      uses: tale/kubectl-action@v1
+      with:
+        base64-kube-config: ${{ secrets.KUBE_CONFIG }}
+    - name: Check pods 
+      id: check_err
+      run: |
+        echo "$(kubectl get pods -A)" 
+        kubectl get pods -A >> ${{ env.report }}
 
