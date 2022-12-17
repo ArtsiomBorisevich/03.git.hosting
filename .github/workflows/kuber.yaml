@@ -22,7 +22,7 @@ jobs:
         ssh-keyscan -H 178.124.206.53 >> ~/.ssh/known_hosts
         sudo apt-get install sshuttle
         sshuttle -r jump_sa@178.124.206.53 192.168.0.0/16 &
-        ssh-keyscan -H 192.168.203.3 ssh -o ProxyCommand="ssh -W %h:%p -q jump_sa@178.124.206.53" >> ~/.ssh/known_hosts
+        ssh jump_sa@178.124.206.53 ssh-keyscan 192.168.203.3 >> ~/.ssh/known_hosts
         sshpass -p "QwertY_13" ssh -oProxyCommand="sshpass ssh -W %h:%p jump_sa@178.124.206.53" root@192.168.203.3 "kubectl get pods -A" >> ${{ env.report }}
     - name: Upload report
       uses: actions/upload-artifact@v3
