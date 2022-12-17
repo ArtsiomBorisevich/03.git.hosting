@@ -12,6 +12,7 @@ jobs:
       output1: ${{ steps.info.outputs.info }}
     env:
       report: report.txt
+      pods: pods.txt
     steps:
     - name: Add SSH key and Make SSH tunnel to k8s (special)
       id: info
@@ -21,9 +22,17 @@ jobs:
         ssh-add - <<< "${{secrets.SSH_KEY}}" 
         ssh-keyscan -H ${{ secrets.PROXY_HOST }} >> ~/.ssh/known_hosts
         ssh ${{ secrets.PROXY_USERNAME }}@${{ secrets.PROXY_HOST }} ssh-keyscan ${{ secrets.HOST }} >> ~/.ssh/known_hosts
-        sshpass -p ${{ secrets.PASSWORD }} ssh -oProxyCommand="sshpass ssh -W %h:%p ${{ secrets.PROXY_USERNAME }}@${{ secrets.PROXY_HOST }}" ${{ secrets.USERNAME }}@${{ secrets.HOST }} "kubectl get pods -A" >> ${{ env.report }}
-    - name: Upload report
-      uses: actions/upload-artifact@v3
-      with:
-        path: ${{ env.report }}
+        sshpass -p ${{ secrets.PASSWORD }} ssh -oProxyCommand="sshpass ssh -W %h:%p ${{ secrets.PROXY_USERNAME }}@${{ secrets.PROXY_HOST }}" ${{ secrets.USERNAME }}@${{ secrets.HOST }} "kubectl get pods --all-namespaces --field-selector=status.phase=Failed" >> ${{ env.report }}
+        echo "info=$(sshpass -p ${{ secrets.PASSWORD }} ssh -oProxyCommand="sshpass ssh -W %h:%p ${{ secrets.PROXY_USERNAME }}@${{ secrets.PROXY_HOST }}" ${{ secrets.USERNAME }}@${{ secrets.HOST }} "kubectl get pods -A | grep -c 'Running'")" >> $GITHUB_OUTPUT
+    - name: Slack Notification
+      if: ${{ steps.info.outputs.info }}>0
+      uses: rtCamp/action-slack-notify@v2
+      env:
+          SLACK_CHANNEL: 08-docker
+          SLACK_COLOR: ${{ job.status }}
+          SLACK_ICON: https://github.com/rtCamp.png?size=48
+          SLACK_MESSAGE: 'Post Content :rocket:'
+          SLACK_TITLE: 'Something wrong with pods. Number of not running pods is ${{ steps.info.outputs.info }}'
+          SLACK_USERNAME: Artiom Borisevich
+          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
 
