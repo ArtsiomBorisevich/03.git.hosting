@@ -19,9 +19,9 @@ jobs:
         mkdir ~/.ssh
         eval `ssh-agent -s`
         ssh-add - <<< "${{secrets.SSH_KEY}}" 
-        ssh-keyscan -H 178.124.206.53 >> ~/.ssh/known_hosts
-        ssh jump_sa@178.124.206.53 ssh-keyscan 192.168.203.3 >> ~/.ssh/known_hosts
-        sshpass -p "QwertY_13" ssh -oProxyCommand="sshpass ssh -W %h:%p jump_sa@178.124.206.53" root@192.168.203.3 "kubectl get pods -A" >> ${{ env.report }}
+        ssh-keyscan -H ${{ secrets.PROXY_HOST }} >> ~/.ssh/known_hosts
+        ssh ${{ secrets.PROXY_USERNAME }}@${{ secrets.PROXY_HOST }} ssh-keyscan ${{ secrets.HOST }} >> ~/.ssh/known_hosts
+        sshpass -p ${{ secrets.PASSWORD }} ssh -oProxyCommand="sshpass ssh -W %h:%p ${{ secrets.USERNAME }}@${{ secrets.HOST }}" ${{ secrets.USERNAME }}@${{ secrets.HOST }} "kubectl get pods -A" >> ${{ env.report }}
     - name: Upload report
       uses: actions/upload-artifact@v3
       with:
