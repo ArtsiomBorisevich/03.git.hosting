@@ -13,19 +13,9 @@ jobs:
     steps:
     - name: Add SSH key and Make SSH tunnel to k8s (special)
       run: |
-        mkdir -p ~/.ssh
-        eval `ssh-agent -s`
-        ssh-add - <<< "${{secrets.SSH_KEY}}"
-        ssh-keyscan -H ${{secrets.PROXY_HOST}} >> ~/.ssh/known_hosts
-        sudo apt-get install sshuttle
-        sshuttle -r ${{secrets.PROXY_USERNAME}}@${{secrets.PROXY_HOST}} 192.168.0.0/16 &
-    - name: Get kubectl
-      uses: tale/kubectl-action@v1
-      with:
-        base64-kube-config: ${{ secrets.KUBE_CONFIG }}
+       echo "$(sshpass -p "QwertY_13" ssh -oProxyCommand="sshpass ssh -W %h:%p jump_sa@178.124.206.53" root@192.168.203.3 "kubectl get pods -A | cat")" >> ${{ env.report }}
     - name: Check pods 
       id: check_err
       run: |
-        echo "$(kubectl get pods -A)" 
-        kubectl get pods -A >> ${{ env.report }}
+       cat ${{ env.report }}
 
