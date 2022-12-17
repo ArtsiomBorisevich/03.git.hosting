@@ -35,7 +35,7 @@ jobs:
           SLACK_USERNAME: Artiom Borisevich
           SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
     - name: Upload report
-      if: steps.info.outputs.info
+      if: steps.info.outputs.info!=0
       uses: actions/upload-artifact@v3
       with:
         path: ${{ env.report }}
