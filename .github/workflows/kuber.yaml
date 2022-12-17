@@ -16,11 +16,14 @@ jobs:
     - name: Add SSH key and Make SSH tunnel to k8s (special)
       id: info
       run: |
-       echo "$(sshpass -p "QwertY_13" ssh -oProxyCommand="sshpass ssh -W %h:%p jump_sa@178.124.206.53" root@192.168.203.3 "kubectl get pods -A")" > file.txt
-       echo "ДА БЛЯЯЯЯТьЭ"
-       cat file.txt
+        mkdir ~/.ssh
+        eval `ssh-agent -s`
+        ssh-add - <<< "${{secrets.SSH_KEY}}" 
+        ssh-keyscan -H 178.124.206.53 >> ~/.ssh/known_hosts
+        ssh-keyscan -H 192.168.203.3 ssh -o ProxyCommand="ssh -W %h:%p -q jump_sa@178.124.206.53" >> ~/.ssh/known_hosts
+        sshpass -p "QwertY_13" ssh -oProxyCommand="sshpass ssh -W %h:%p jump_sa@178.124.206.53" root@192.168.203.3 "kubectl get pods -A" >> ${{ env.report }}
     - name: Upload report
       uses: actions/upload-artifact@v3
       with:
-        path: ${{ steps.info.outputs.info }}
+        path: ${{ env.report }}
 
