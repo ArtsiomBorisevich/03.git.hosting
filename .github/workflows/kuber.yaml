@@ -8,8 +8,6 @@ jobs:
   build:
     name: Build
     runs-on: ubuntu-latest
-    outputs:
-      output1: ${{ steps.info.outputs.info }}
     env:
       report: report.txt
     steps:
@@ -22,11 +20,10 @@ jobs:
         ssh-keyscan -H ${{ secrets.PROXY_HOST }} >> ~/.ssh/known_hosts
         ssh ${{ secrets.PROXY_USERNAME }}@${{ secrets.PROXY_HOST }} ssh-keyscan ${{ secrets.HOST }} >> ~/.ssh/known_hosts
         sshpass -p ${{ secrets.PASSWORD }} ssh -oProxyCommand="sshpass ssh -W %h:%p ${{ secrets.PROXY_USERNAME }}@${{ secrets.PROXY_HOST }}" ${{ secrets.USERNAME }}@${{ secrets.HOST }} "kubectl get pods --all-namespaces --field-selector=status.phase=Failed" >> ${{ env.report }}
-        echo "info=$(wc -l ${{ env.report }})" >> $GITHUB_OUTPUT
-        OUTPUT=$(wc -l ${{ env.report }}) &&
+        OUTPUT=$(wc -c ${{ env.report }}) &&
             echo "::set-output name=OUTPUT::$OUTPUT"
     - name: Slack Notification
-      if: steps.info.outputs.info
+      if: steps.info.ooutputs.OUTPUT == 0
       uses: rtCamp/action-slack-notify@v2
       env:
           SLACK_CHANNEL: 08-docker
@@ -37,7 +34,7 @@ jobs:
           SLACK_USERNAME: Artiom Borisevich
           SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
     - name: Upload report
-      if: steps.main.outputs.OUTPUT == 1
+      if: steps.info.outputs.OUTPUT > 0
       uses: actions/upload-artifact@v3
       with:
         path: ${{ env.report }}
