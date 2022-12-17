@@ -13,9 +13,9 @@ jobs:
     steps:
     - name: Add SSH key and Make SSH tunnel to k8s (special)
       run: |
-       echo "$(sshpass -p "QwertY_13" ssh -oProxyCommand="sshpass ssh -W %h:%p jump_sa@178.124.206.53" root@192.168.203.3 "kubectl get pods -A")"
-    - name: Check pods 
-      id: check_err
-      run: |
-       cat ${{ env.report }}
+       echo "$(sshpass -p "QwertY_13" ssh -oProxyCommand="sshpass ssh -W %h:%p jump_sa@178.124.206.53" root@192.168.203.3 "kubectl get pods -A")" >> ${{ env.report }} 
+    - name: Upload report
+      uses: actions/upload-artifact@v3
+      with:
+        path: ${{ env.report }} 
 
