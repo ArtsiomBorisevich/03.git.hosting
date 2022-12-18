@@ -5,5 +5,5 @@ jobs:
     # The type of runner that the job will run on
     runs-on: self-hosted
     steps:
-      - name: Say Hello World
-        run: echo Hello, world!
+      - name: Say Hello 
+        run: echo Zdorovo otec!
