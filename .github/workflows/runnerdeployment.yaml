@@ -1,9 +1,10 @@
-name: Hello-World
-on: [push, workflow_dispatch]
-jobs:
-  build:
-    # The type of runner that the job will run on
-    runs-on: self-hosted
-    steps:
-      - name: Say Hello 
-        run: echo Zdorovo otec!
+#name: Hello-World
+#on: [push, workflow_dispatch]
+#jobs:
+#  build:
+#    # The type of runner that the job will run on
+#    runs-on: self-hosted
+#    steps:
+#      - name: Say Hello 
+#        run: echo Zdorovo otec!
+#
