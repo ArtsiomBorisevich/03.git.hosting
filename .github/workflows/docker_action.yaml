@@ -37,9 +37,9 @@ jobs:
             sleep 5
             docker ps
             docker exec spring su -
-            docker exec spring whoami | grep -c 'root'>> isroot.txt
+            docker exec spring whoami >> isroot.txt
             curl --request GET --url http://localhost:8080 >> report.txt
-            cat isroot.txt 
+            cat isroot.txt | grep -c 'root' 
         #    [[ -f isroot.txt ]] && exit 1
  
       - name: Upload report
