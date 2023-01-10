@@ -30,6 +30,7 @@ jobs:
         
       - name: Check data and no-root inside
         id: info
+        continue-on-error: true
         run: |
             docker build --network=host -t spring:1.0.0 .
             docker run -d --name spring -p 8080:8080 -t spring:1.0.0
@@ -46,7 +47,7 @@ jobs:
           path: report.txt  
           
       - name: Slack Notification
-        if: ${{ failure() }}
+        if: steps.info.outcome != 'success'
         uses: rtCamp/action-slack-notify@v2
         env:
           SLACK_CHANNEL: project_borisevich
