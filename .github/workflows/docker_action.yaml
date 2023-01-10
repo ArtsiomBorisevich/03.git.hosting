@@ -46,10 +46,10 @@ jobs:
           path: report.txt  
           
       - name: Slack Notification
-        if: (steps.info.outputs.ISROOT == "appuser")
+        if: (steps.info.outputs.ISROOT == appuser)
         uses: rtCamp/action-slack-notify@v2
         env:
-          SLACK_CHANNEL: appuser
+          SLACK_CHANNEL: project_borisevich
           SLACK_COLOR: ${{ job.status }}
           SLACK_ICON: https://github.com/rtCamp.png?size=48
           SLACK_MESSAGE: 'Post Content :rocket:'
