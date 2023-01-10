@@ -36,7 +36,7 @@ jobs:
             sleep 5
             docker ps
             docker exec spring su -
-            OUTPUT=$(docker exec spring whoami)&& echo "::set-output name=OUTPUT::$OUTPUT"
+            OUTPUT=docker exec spring whoami && echo "::set-output name=OUTPUT::$OUTPUT"
             curl --request GET --url http://localhost:8080 >> report.txt
             echo $OUTPUT >> report.txt
             
