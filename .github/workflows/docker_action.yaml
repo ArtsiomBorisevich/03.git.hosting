@@ -33,17 +33,14 @@ jobs:
         run: |
             docker build --network=host -t spring:1.0.0 .
             docker run -d --name spring -p 8080:8080 -t spring:1.0.0
-            docker images
             sleep 5
             docker ps
-            docker exec spring su -
+            curl --request GET --url http://localhost:8080 >> report.txt
             docker exec spring whoami
-        #    docker exec spring whoami >> isroot.txt
-        #    curl --request GET --url http://localhost:8080 >> report.txt
-        #    cat isroot.txt | grep -c 'root' 
-        #    [[ -f isroot.txt ]] && exit 1
+            docker exec spring su - 
  
       - name: Upload report
+        if: ${{ always() }}
         uses: actions/upload-artifact@v3
         with:
           path: report.txt  
