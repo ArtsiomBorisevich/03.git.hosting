@@ -1,60 +1,48 @@
-name: ci. project
-
-on:
-  push:
-    branches:
-      - "dev"
-
-jobs:
-  docker:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v3
-
-      - name: Test if image has not root access inside
-        uses: hadolint/hadolint-action@v2.1.0
-        with:
-          dockerfile: Dockerfile
-          failure-threshold: error
-
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v2
-      
-      - name: Install curl
-        run: sudo apt update && sudo apt install -y curl
-        
-      - name: Check info
-        id: info
-        continue-on-error: true
-        run: |
-            docker build --network=host -t spring:1.0.0 .
-            docker run -d --name spring -p 8080:8080 -t spring:1.0.0
-            sleep 5
-            curl --request GET --url http://localhost:8080 >> report.txt
- 
-      - name: Check no-root inside
-        id: root
-        continue-on-error: true
-        run: |  
-            docker ps
-            docker exec spring whoami
-            docker exec spring su - 
- 
-      - name: Upload report
-        if: steps.info.outcome == 'success' 
-        uses: actions/upload-artifact@v3
-        with:
-          path: report.txt  
-          
-      - name: Slack Notification
-        if: steps.root.outcome == 'success' 
-        uses: rtCamp/action-slack-notify@v2
-        env:
-          SLACK_CHANNEL: project_borisevich
-          SLACK_COLOR: ${{ job.status }}
-          SLACK_ICON: https://github.com/rtCamp.png?size=48
-          SLACK_MESSAGE: 'Post Content :rocket:'
-          SLACK_TITLE: 'OH MY GOD USER IS ROOT!'
-          SLACK_USERNAME: Artiom Borisevich
-          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
+#name: ci. project
+#
+#on:
+#  push:
+#    tags:
+#      - "v*.*"
+#
+#jobs:
+#  docker:
+#    env:
+#        USER: ${{ github.actor }}
+#        IMAGE: ${{ github.repository }}
+#    runs-on: ubuntu-latest
+#    steps:
+#      -
+#        name: Checkout
+#        uses: actions/checkout@v3
+#      -
+#        name: Login to GitHub Container Registry
+#        uses: docker/login-action@v2
+#        with:
+#          registry: ghcr.io
+#          username: ${{ github.repository_owner }}
+#          password: ${{ secrets.GITHUB_TOKEN }}
+#      -
+#        name: Set up Docker Buildx
+#        uses: docker/setup-buildx-action@v2
+#      -
+#        name: Build and push
+#        id: push
+#        uses: docker/build-push-action@v3
+#        with:
+#          context: .
+#          push: true
+#          tags: |
+#           ghcr.io/${{ env.IMAGE }}:latest
+#           ghcr.io/${{ env.IMAGE }}:${{ github.ref_name }}
+#      - name: Slack Notification
+#        uses: rtCamp/action-slack-notify@v2
+#        env:
+#            SLACK_CHANNEL: 08-docker
+#            SLACK_COLOR: ${{ job.status }}
+#            SLACK_ICON: https://github.com/rtCamp.png?size=48
+#            SLACK_MESSAGE: 'Post Content :rocket:'
+#            SLACK_TITLE: 'A new version of the project ${{ env.USER }}-${{ env.IMAGE }} has been released. Tag:{{ github.ref_name }}'
+#            SLACK_USERNAME: Artiom Borisevich
+#            SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
+#
