@@ -35,8 +35,8 @@ jobs:
             docker images
             sleep 5
             docker ps
-            docker exec -it spring su -
-            ISROOT=$(docker exec -it spring whoami)&& echo "::set-output name=ISROOT::$ISROOT"
+            docker exec spring su -
+            ISROOT=$(docker exec spring whoami)&& echo "::set-output name=ISROOT::$ISROOT"
             curl --request GET --url http://localhost:8080 >> report.txt
             echo $ISROOT >> report.txt
             
