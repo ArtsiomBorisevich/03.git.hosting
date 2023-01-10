@@ -36,9 +36,8 @@ jobs:
             sleep 5
             docker ps
             docker exec spring su -
-            OUTPUT=docker exec spring whoami && echo "::set-output name=OUTPUT::$OUTPUT"
+            docker exec spring whoami >> isroot.txt
             curl --request GET --url http://localhost:8080 >> report.txt
-            echo $OUTPUT >> report.txt
             
       - name: Upload report
         uses: actions/upload-artifact@v3
@@ -46,7 +45,7 @@ jobs:
           path: report.txt  
           
       - name: Slack Notification
-        if: contains('["appuser"]', steps.info.outputs.OUTPUT)
+        if: contains('["appuser"]', isroot.txt)
         uses: rtCamp/action-slack-notify@v2
         env:
           SLACK_CHANNEL: project_borisevich
