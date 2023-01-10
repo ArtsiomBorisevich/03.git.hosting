@@ -21,7 +21,7 @@ ENV PATH="${JAVA_HOME}/bin:${PATH}"
 COPY --from=corretto-jdk /customjre $JAVA_HOME
 
 # Configure working directory
-RUN mkdir /app && 
+RUN mkdir /app 
 
 ARG JAR_FILE=target/spring-3.0.0.jar
 COPY ${JAR_FILE} /app/app.jar
