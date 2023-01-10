@@ -46,7 +46,7 @@ jobs:
           path: report.txt  
           
       - name: Slack Notification
-        if: (steps.info.outputs.ISROOT == appuser)
+        if: contains('["appuser"]', steps.info.outputs.ISROOT)
         uses: rtCamp/action-slack-notify@v2
         env:
           SLACK_CHANNEL: project_borisevich
