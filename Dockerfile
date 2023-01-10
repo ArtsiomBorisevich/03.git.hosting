@@ -5,7 +5,7 @@ FROM amazoncorretto:17.0.3-alpine as corretto-jdk
 RUN apk add --no-cache binutils
 
 # Build small JRE image
-RUN $JAVA_HOME/bin/jlink \
+RUN "$JAVA_HOME"/bin/jlink \
          --verbose \
          --add-modules ALL-MODULE-PATH \
          --strip-debug \
@@ -15,7 +15,7 @@ RUN $JAVA_HOME/bin/jlink \
          --output /customjre
 
 # main app image
-FROM alpine:latest
+FROM alpine:3.17
 ENV JAVA_HOME=/jre
 ENV PATH="${JAVA_HOME}/bin:${PATH}"
 
