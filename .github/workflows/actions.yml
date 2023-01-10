@@ -1,6 +1,9 @@
 name: Test for manifests
 
-on: [push]
+on:
+  push:
+    branches:
+      - "dev"
 
 jobs:
   find-files:
@@ -31,13 +34,13 @@ jobs:
           files: ${{matrix.manifest-files}}
 
       - name: Slack Notification
-          if: ${{ always() }}
-          uses: rtCamp/action-slack-notify@v2
-          env:
-            SLACK_CHANNEL: project_borisevich
-            SLACK_COLOR: ${{ job.status }}
-            SLACK_ICON: https://github.com/rtCamp.png?size=48
-            SLACK_MESSAGE: 'Post Content :rocket:'
-            SLACK_TITLE: 'Manifests validated!'
-            SLACK_USERNAME: Artiom Borisevich
-            SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
+        if: ${{ always() }}
+        uses: rtCamp/action-slack-notify@v2
+        env:
+          SLACK_CHANNEL: project_borisevich
+          SLACK_COLOR: ${{ job.status }}
+          SLACK_ICON: https://github.com/rtCamp.png?size=48
+          SLACK_MESSAGE: 'Post Content :rocket:'
+          SLACK_TITLE: 'Manifests validated!'
+          SLACK_USERNAME: Artiom Borisevich
+          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
