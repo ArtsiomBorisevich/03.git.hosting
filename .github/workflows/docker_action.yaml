@@ -27,6 +27,7 @@ jobs:
       - name: Check
         run: |
             docker build --network=host -t spring:1.0.0 .
+            docker images
             docker run -d -p 8080:8080 -t spring:1.0.0
             curl --request GET --url http://localhost:8080 >> report.txt
 
