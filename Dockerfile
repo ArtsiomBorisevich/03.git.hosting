@@ -1,11 +1,9 @@
 # base image to build a JRE
 FROM amazoncorretto:17.0.3-alpine as corretto-jdk
 
-# required for strip-debug to work
-RUN apk add --no-cache binutils
-
 # Build small JRE image
-RUN "$JAVA_HOME"/bin/jlink \
+RUN apk add --no-cache binutils \
+    && "$JAVA_HOME"/bin/jlink \
          --verbose \
          --add-modules ALL-MODULE-PATH \
          --strip-debug \
