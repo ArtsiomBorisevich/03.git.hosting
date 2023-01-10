@@ -27,9 +27,9 @@ jobs:
       - name: Check
         run: |
             docker build --network=host -t spring:1.0.0 .
+            docker run -d -p 8095:8080 -t spring:1.0.0
             docker images
-            docker run -d -p 8080:8080 -t spring:1.0.0
-            curl --request GET --url http://localhost:8080 >> report.txt
+            curl --request GET --url http://localhost:8095 >> report.txt
 
       - name: Upload report
         uses: actions/upload-artifact@v3
