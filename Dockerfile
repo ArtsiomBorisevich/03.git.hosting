@@ -20,18 +20,11 @@ ENV PATH="${JAVA_HOME}/bin:${PATH}"
 # copy JRE from the base image
 COPY --from=corretto-jdk /customjre $JAVA_HOME
 
-# Add app user
-ARG APPLICATION_USER=appuser
-RUN adduser --no-create-home -u 1000 -D $APPLICATION_USER
-
 # Configure working directory
-RUN mkdir /app && \
-    chown -R $APPLICATION_USER /app
-
-USER 1000
+RUN mkdir /app && 
 
 ARG JAR_FILE=target/spring-3.0.0.jar
-COPY --chown=1000:1000 ${JAR_FILE} /app/app.jar
+COPY ${JAR_FILE} /app/app.jar
 WORKDIR /app
 
 EXPOSE 8080
